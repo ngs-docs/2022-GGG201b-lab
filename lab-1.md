@@ -9,7 +9,7 @@ tags: ggg, ggg2021, ggg201b
 ## Friday Lab Outline - 1/7
 
 * introductions and a short presentation
-* [syllabus](https://hackmd.io/wnAlw5Y6QRu4kfWiri9Cwg?view) FIXME
+* [syllabus](https://hackmd.io/MCWqGjO3S0KdxJP10KPKNw?view)
 * our first workflow: variant calling!!!!!!
 
 ## Day 1: Variant Calling
