@@ -46,13 +46,13 @@ Homeworks can be done collaboratively, but you need to hand it in individually.
 I grade each homework S/U. The division of grading between labs and
 the rest of the course is in the whole course syllabus.
 
-## Office hours
-
-You can sign up for office hours using [this calendly link](https://calendly.com/ctitusbrown/30min), or e-mail him at ctbrown@ucdavis.edu.
-
 ## Instructors
 
 C. Titus Brown (IOR) (<ctbrown@ucdavis.edu>)
+
+## Office hours
+
+You can sign up for office hours using [this calendly link](https://calendly.com/ctitusbrown/30min), or e-mail Titus at ctbrown@ucdavis.edu.
 
 ## Lab description
 
