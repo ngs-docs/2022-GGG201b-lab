@@ -153,13 +153,14 @@ A few things to discuss:
 
 Some foreshadowing:
 
-* wouldn't it be nice to not have to run each rule one by one?
-* wouldn't it be nice if the command didn't rerun if it had already run
+* wouldn't it be nice to not have to run each rule one by one, in the right order?
+* wouldn't it be nice if the command didn't rerun if it had already run?
 
 ### Upgrading our Snakefile by adding 'output:'
 
 Edit `Snakefile` and add:
 and add `output: "SRR2584857_1.fastq.gz"` to the `download_data` rule.
+Be sure to match the indentation within the rule.
 
 Now try running the rule: `snakemake -p SRR2584857_1.fastq.gz`
 
