@@ -33,25 +33,30 @@ wait 20 or 30 seconds...
 
 ### Open a terminal
 
-...and set a prompt:
+Go to the 'Terminal' tab. You'll end up with a long prompt that starts
+with 'jovyan@...'.  This is the command line, or "shell", or "UNIX
+shell". (See
+[Lesson 1 in the Remote Computing workshop series](https://ngs-docs.github.io/2021-august-remote-computing/index.html)
+for background info.)
+
+First, reset the prompt to be shorter:
 ```
 PS1='$ '
 ```
 
 ### Run some stuff!
 
-There are lots of "rules" in the Snakefile [(view it on GitHub, too)](https://github.com/ngs-docs/2021-ggg-201b-variant-calling/week1/Snakefile)! Try:
+There are lots of "rules" in the SnakefileTry:
 
 ```
 grep rule Snakefile
 ```
 
-and
+and open the Snakefile in the RStudio editor to look through the file;
+you can also
+[(view it on GitHub, too)](https://github.com/ngs-docs/2021-ggg-201b-variant-calling/blob/week1/Snakefile)!
 
-```
-nano -ET4 Snakefile
-```
-to examine them. To exit type `Control + x`
+The file consists of a list of rules.  We will discuss:
 
 * what is the structure of a rule?
   * 'rule' block
@@ -62,14 +67,14 @@ to examine them. To exit type `Control + x`
 
 ----
 
-Let's run one! Try the following command:
+Let's run a rule! Try the following command:
 ```
 snakemake -p -j 1 map_reads
 ```
 
 This says, "run the shell command in the Snakefile under the 'map_reads' rule".
 
-`-p` means "show the command that you're running.
+`-p` means "show the shell command that you're running".
 
 `-j 1`
 
@@ -98,12 +103,13 @@ Start with
 snakemake -p -j 1 --use-conda download_data
 ```
 
-ahh... cool green!
+That worked - that's what the green text signifies.
 
-What does this command do? tl;dr creates the file `SRR2584857_1.fastq.gz`.
-(What's in this file?)
+What does this command do? It creates the file `SRR2584857_1.fastq.gz`,
+which contains a bunch of sequencing data; we'll look at this file in more
+detail later.
 
-Now run some more -- one at a time.
+Now run some more rules, one at a time.
 
 ```
 snakemake -p -j 1 --use-conda download_genome
@@ -122,7 +128,8 @@ This runs a complete (if fairly simple :) variant calling workflow.
 
 The result is a file called `SRR2584857_1.ecoli-rel606.vcf`.
 
-View the results in the RStudio window by clicking on that file.
+View the results in the RStudio window by clicking on that file in the file
+browser.
 
 You can also go to the shell prompt and execute:
 
@@ -130,21 +137,19 @@ You can also go to the shell prompt and execute:
 samtools index SRR2584857_1.ecoli-rel606.bam.sorted
 samtools tview -p ecoli:4314717 --reference ecoli-rel606.fa SRR2584857_1.ecoli-rel606.bam.sorted
 ```
-which will show you the actual aligned reads.
+which will show you the actual aligned reads. (Use arrow keys to navigate, and 'q' to exit.)
 
 A few things to discuss:
 
-* these are just shell commands, with a bit of "decoration". You could run them yourself if you wanted!
-* order of the rules in the Snakefile doesn't matter
-* rules can have one or more shell commands
-* `snakemake -p` prints the command
-* `-j 1` says "use only one CPU"
-* `--use-conda` says to install software as specified.
-* red if it fails (try breaking one command :)
+* these are just shell commands, with a bit of "decoration". You could run them yourself if you wanted, outside of snakemake.
+* the order of the rules in the Snakefile doesn't matter
+* rules can have one or more shell commands, one after the other on their own lines
+* `snakemake -p` prints the command that is being executed
+* `-j 1` says "use only one CPU". More on this later.
+* `--use-conda` says to install software as specified in the conda: block.
+* snakemake prints things out in red if it fails.
 * it's all case sensitive...
 * tabs and spacing matter.
-* why are the files named the way they are?
-* if you tell snakemake what software a step needs, it will install that software for you (and manage it for you)
 
 Some foreshadowing:
 
