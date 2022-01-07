@@ -114,7 +114,7 @@ Now run some more rules, one at a time.
 ```
 snakemake -p -j 1 --use-conda download_genome
 ```
-This creates the file `ecoli-rel606.fa.gz.
+This creates the file `ecoli-rel606.fa.gz`.
 
 Now run:
 ```
@@ -172,7 +172,7 @@ Try removing the file: `rm SRR2584857_1.fastq.gz`. Now run the rule again.
 
 To the `map_reads` rule, add:
 
-`input: "SRR2584857_1.fastq.gz", "ecoli-rel606.fa"`
+`input: "SRR2584857_1.fastq.gz", "ecoli-rel606.fa.gz"`
 
 What does this do? (And does it work?)
 
