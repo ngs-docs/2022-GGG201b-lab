@@ -1,12 +1,15 @@
 ---
-tags: ggg, ggg2021, ggg201b
+tags: ggg, ggg2022, ggg201b
 ---
+
+[![hackmd-github-sync-badge](https://hackmd.io/ofim9y3qQOqWmbln1e2xcw/badge)](https://hackmd.io/ofim9y3qQOqWmbln1e2xcw)
+
 
 [toc]
 
-# GGG 201b, jan 2021 - lab 2 - NOTES
+# GGG 201b, jan 2022 - lab 2 - NOTES
 
-## Friday Lab Outline - 1/15
+## Friday Lab Outline - 1/13
 
 Outline:
 * more variant calling with more snakemake!!
