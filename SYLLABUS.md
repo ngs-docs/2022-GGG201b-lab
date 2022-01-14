@@ -4,6 +4,9 @@ tags: ggg, ggg2022, ggg201b
 
 # Syllabus for GGG 201(b) lab section: Genomics (Winter 2021/2022)
 
+[![hackmd-github-sync-badge](https://hackmd.io/MCWqGjO3S0KdxJP10KPKNw/badge)](https://hackmd.io/MCWqGjO3S0KdxJP10KPKNw)
+
+
 [toc]
 
 UC Davis
