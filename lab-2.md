@@ -4,8 +4,7 @@ tags: ggg, ggg2022, ggg201b
 
 [![hackmd-github-sync-badge](https://hackmd.io/ofim9y3qQOqWmbln1e2xcw/badge)](https://hackmd.io/ofim9y3qQOqWmbln1e2xcw)
 
-
-[toc]
+([Permanent URL](https://github.com/ngs-docs/2022-GGG201b-lab/blob/main/lab-2.md))
 
 # GGG 201b, jan 2022 - lab 2 - NOTES
 
@@ -24,11 +23,11 @@ learning goals:
 
 ### Start a binder
 
-https://github.com/ngs-docs/2021-ggg-201b-variant-calling
+We'll be using files from [this repository](https://github.com/ngs-docs/2021-ggg-201b-variant-calling).
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://github.com/ngs-docs/2021-ggg-201b-variant-calling
+Click on [![Binder](https://mybinder.org/badge_logo.svg)](https://github.com/ngs-docs/2021-ggg-201b-variant-calling
 )
-wait 20 or 30 seconds...
+and wait 20 or 30 seconds...
 
 ### Open a terminal
 
