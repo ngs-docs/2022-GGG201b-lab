@@ -120,15 +120,15 @@ Hint: look at what changes in the directory when you run the command. You can us
 A few quick notes:
 * input and output (and other things) can be in any order, as long as they are before shell.
 * you can either put things all on one line, or form a block by indenting.
-* rule names can be any valid variable, which basically means letters and underscores; you can use numbers after a first character.
 * you can make lists for multiple input or output files by separating filenames with a comma
+* rule names can be any valid variable, which basically means letters and underscores; you can use numbers after a first character.
 
 ### Rewriting the rules to have less duplication by using `{input}` and `{output}`
 
 If you look at the rules, you'll see that input and output filenames are
 specified multiple times. That's rude! (And potentially confusing, if you
 change the `input:` block and forget to change the `shell:` block, or
-something.)
+something. Not that I've ever done that.)
 
 Luckily, snakemake lets you use *template variables* in the `shell:` block
 so that you can just say `{output}` and it will figure out what to put there.
@@ -229,7 +229,7 @@ samtools index SRR2584857_1.ecoli-rel606.bam.sorted
 samtools tview -p ecoli:4314717 --reference ecoli-rel606.fa SRR2584857_1.ecoli-rel606.bam.sorted
 ```
 
-to actually _look_ at the aligned reads."
+to actually _look_ at the aligned reads.
 
 ### Shotgun sequencing
 
