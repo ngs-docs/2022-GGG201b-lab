@@ -2,7 +2,9 @@
 tags: ggg, ggg2021, ggg201b
 ---
 
-[toc]
+[![hackmd-github-sync-badge](https://hackmd.io/D1J_6CCDQluLktknHb8yFg/badge)](https://hackmd.io/D1J_6CCDQluLktknHb8yFg)]
+
+([Permanent URL](https://github.com/ngs-docs/2022-GGG201b-lab/blob/main/lab-1.md))
 
 # GGG 201b, Jan 2022 - lab 1 - NOTES
 
