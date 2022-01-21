@@ -19,7 +19,7 @@ what we did last week -
 
 We're going to be switching over to using the on-campus 'farm' HPC today, instead of the binder we used for the last two weeks.
 
-There several reasons for this.
+There are several reasons for this.
 
 * farm supports larger analysis efforts (larger files, longer jobs, more memory) than binder;
 * so, it's closer to what you'd actually use for real data analysis;
@@ -65,13 +65,13 @@ We have to go through a couple of different steps in order to use farm today.
 
 First, when we log into farm.cse.ucdavis.edu, we are logging into what's called the "head node". This is a gateway computer that is used for copying files and doing workflow development, but since it is shared by everyone you don't want to run big analyses on it - that will consume resources that others might need.
 
-Instead, you use the 
+Instead, you use the slurm queuing system to ask for a compute node - please see [Executing large analyses on HPC clusters](https://ngs-docs.github.io/2021-august-remote-computing/executing-large-analyses-on-hpc-clusters-with-slurm.html) for more information.
 
-[Executing large analyses on HPC clusters](https://ngs-docs.github.io/2021-august-remote-computing/executing-large-analyses-on-hpc-clusters-with-slurm.html)
-
+So, run:
 ```
-srun -A ctbrowngrp -p high -t 2:00:00 --mem=5000 --pty bash
+srun -p high2 -t 2:00:00 --mem=5000 --pty bash
 ```
+and your prompt should change to have a different computer name than 'farm' on it.
 
 ### Installing snakemake using conda
 
@@ -79,7 +79,7 @@ We're going to start by using conda/mamba to install the `snakemake` workflow so
 
 Run:
 ```
-mamba install snakemake-minimal
+mamba install -y snakemake-minimal
 ```
 This will go find the snakemake-minimal package on the Interwebs, grab it, download it, and install it in your account.
 
@@ -119,7 +119,7 @@ Below, we're going to use the `nano` command-line editor. If you already know ho
 
 Let's edit the Snakefile like so:
 ```
-nano -ET4
+nano -ET4 -m Snakefile
 ```
 and add, at the very top, the three lines:
 
@@ -128,6 +128,7 @@ rule all:
     input:
         "SRR2584857_1.ecoli-rel606.vcf"
 ```
+then hit CTRL-X, enter, yes to save.
 
 What does this do?
 
@@ -151,7 +152,7 @@ Right now, every time we want to add a new set of reads (the SRR sample) we will
 
 We're going to use _snakemake wildcards_ to generalize rules.
 
-Let's try to generalize the `map_reads` rule: everywhere you see `RR2584857_1`, replace it with `{sample}`. It should look like this:
+Let's try to generalize the `map_reads` rule: everywhere you see `SRR2584857_1`, replace it with `{sample}`. It should look like this:
 ```
 rule map_reads:
     conda: "env-minimap.yml"
@@ -165,7 +166,7 @@ rule map_reads:
 Now ask snakemake to regenerate the mapping output file:
 ```
 rm SRR2584857_1.ecoli-rel606.sam
-snakemake --use-conda SRR2584857_1.ecoli-rel606.sam
+snakemake -j 4 --use-conda SRR2584857_1.ecoli-rel606.sam
 ```
 and it should work!
 
@@ -174,3 +175,31 @@ But what happens if you try to run `map_reads` directly? You'll get an error - "
 What's happening here is that snakemake can _guess_ that you want to use the `map_reads` rule when you ask for `SRR2584857_1.ecoli-rel606.sam`, and fill in the wildcards from there. But if you just tell it to run `map_reads`, it justifiably throws up its hands and tells you it doesn't know how to fill in `{sample}`.
 
 Now, let's convert more rules!
+
+```
+rule call_variants:
+    conda: "env-bcftools.yml"
+    input:
+        ref="ecoli-rel606.fa",
+        bamsort="{sample}.ecoli-rel606.bam.sorted"
+    output:
+        pileup="{sample}.ecoli-rel606.pileup",
+        bcf="{sample}.ecoli-rel606.bcf",
+        vcf="{sample}.ecoli-rel606.vcf"
+    shell: """
+        bcftools mpileup -Ou -f {input.ref} {input.bamsort} > {output.pileup}
+        bcftools call -mv -Ob {output.pileup} -o {output.bcf}
+        bcftools view {output.bcf} > {output.vcf}
+    """
+```
+
+```
+rule gunzip_fa:
+    input:                       
+        "ecoli-rel606.fa.gz"
+    output:
+        "ecoli-rel606.fa"
+    shell: """  
+        gunzip -c {input} > {output}
+    """
+```
