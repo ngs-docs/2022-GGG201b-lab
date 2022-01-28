@@ -3,97 +3,215 @@ tags: ggg, ggg2021, ggg201b
 ---
 # Lab 4 outline - even more variant calling; snakemake wildcards. - GGG 201(b) lab, Jan 29, 2021
 
+[![hackmd-github-sync-badge](https://hackmd.io/Wldqc4MiTWWeh-W6OIHMQA/badge)](https://hackmd.io/Wldqc4MiTWWeh-W6OIHMQA)
+
+([Permanent link on github](https://github.com/ngs-docs/2022-GGG201b-lab/blob/main/lab-4.md))
+
+Contents:
+
+[toc]
+
 ## last week outline + additions
 
-last Friday was mostly "what are we doing with variant calling, and this workflow specifically?"
+last Friday was mostly "what are we doing with variant calling, and this workflow specifically?" And we started to talk about doing a better job of variant calling, and/or filtering our variant calls.
 
-We'll finish that discussion today.
+We'll continue (finish?) that discussion today.
 
 ## but first... homework.
 
-I plan to post homework today, to be due Tuesday, February 9th. Does this conflict with other classes?
+I posted some homework! See [lab HW #1](https://hackmd.io/kW_TiOLsQxeQzRlj6C33jg?view.)
 
-### last week (week 3)
+It is due next Thursday at 10pm. Please let me know if that is a terrible due date. (We're going to move on to assembly next Friday so I would like to have get the variant calling homework out of the way for lab 5!)
 
-assumptions and scope:
-- which do we want? SNPs, short indels, long indels/structural variation
-- accurate short reads work well for SNPs
-- inaccurate long reads vs accurate long reads
+A lot of this homework is about getting things basically working - github, editing, making changes to Snakefiles.
 
-workflow steps and how they affect results -
- * affected by biology (genome size, structure, etc.)
- * affected by sequencing details (long reads vs short, etc.)
- * affected by parameters (depth, diploidy, etc.)
- * not affected at all
+key note: you can work together but please do hand things in separately.
 
+## Log into farm, etc.
 
-Outline of likely topics:
-* how shotgun sequencing works
-    * sample prep
-    * Illumina + PCR
-    * Single molecule sequencing & long reads
-* key assumptions underlying our sequence analysis: "quantitative" or "digital" sequencing
-    * variant calling
-    * assembly
-    * RNAseq
-    * vs metagenomics
-* our goal(s) in variant calling
+Log into farm with your datalab-XX account, as we did [last week](https://hackmd.io/0NT1QTkJQD-PTPHivcL83Q?view#Getting-started-with-farm).
 
-### week 4
+Start up a 2 hour session on a compute node:
+```
+srun -p high2 -t 2:00:00 -c 2 --mem=5000 --pty bash
+```
 
-* handling the data
-    * quality analysis and error removal
-    * alignment
-    * organizing the data
-    * calling variants via pileup
-        * (what other methods could be used?)
-    * summarizing variants, and interpreting VCF
-    * visualization and "gut check"
-* how does biology mess with us?
-    * ploidy
-    * repetitive sequence
-    * heterozygosity/strain variation
+and get the week4_begin branch of the variant calling repository.
 
-## week 4 - more snakemake: wildcards!
+```
+git clone https://github.com/ngs-docs/2022-ggg-201b-variant-calling \
+    ggg201-week4 -b week4_begin
+```
 
-Let's make this workflow a bit more generic/less sample specific!
+and change in to that directory
+```
+cd ~/ggg201-week4/
+```
+and then run things:
+```
+snakemake -p -j 2 --use-conda
+```
 
-[![Binder](https://binder.pangeo.io/badge_logo.svg)](https://binder.pangeo.io/v2/gh/ngs-docs/2021-ggg-201b-variant-calling/week3?urlpath=rstudio)
+Note that you don't need to install snakemake again, since you already did that once (last week). Revisit the `mamba install` instructions from lab 3 if you haven't run them yet.
 
-If you look at [our week2 workflow](https://github.com/ngs-docs/2021-ggg-201b-variant-calling/blob/week3/Snakefile), you'll see that we have a specific sample names in there (`SRR2584857_1`). How do we make a workflow that runs on more than one sample?
+## revisiting the end of last week (week 3)
 
-The answer is "wildcards". Snakemake can *automatically* figure out the sample name, given a few hints.
+We're starting from [this Snakefile](https://github.com/ngs-docs/2022-ggg-201b-variant-calling/blob/week4_begin/Snakefile), which has split out the gunzip step, but has not split out the VCF file.
 
-To make use of wildcards, you replace the sample name in the input and output for a rule with "{substitute}".
+(This is the same Snakefile you will be starting with in the homework.)
 
-Let's do this together for map_reads, and then you can do it on your own for sam_to_bam and sort_bam.
+Let's start by adding in a new VCF output file - `.spec.vcf`, for "specific."
 
-```python
-rule map_reads:
-    conda: "env-minimap.yml"
+1. in rule `all`, rename the current input `SRR*.ecoli-rel606.vcf` to have `.sens.vcf` on the end.
+2. Add a new input with `.spec.vcf` on the end to rule `all`.
+3. in rule `call_variants`, make the same change to the output VCF.
+4. add a new rule, `call_variants_spec`, that we will use to implement filtering.
+
+```
+rule call_variants_spec:
+    conda: "env-bcftools.yml"
     input:
-        ref="ecoli-rel606.fa.gz",
-        reads="{sample}.fastq.gz"
-    output: "{sample}.ecoli-rel606.sam"
+        vcf="SRR2584857_1.ecoli-rel606.sens.vcf"
+    output:
+        vcf="SRR2584857_1.ecoli-rel606.spec.vcf"
     shell: """
-        minimap2 -ax sr {input.ref} {input.reads} > {output}
+        bcftools filter -Ov {input} > {output}
     """
 ```
 
-A few simple rules for wildcards:
+Now re-run everything --
+```
+snakemake -j 1 --use-conda
+```
+and make sure you have two output VCF files:
+```
+ls *.spec.vcf *.sens.vcf
+```
+should show
+```
+>SRR2584857_1.ecoli-rel606.sens.vcf  SRR2584857_1.ecoli-rel606.spec.vcf
+```
 
-* wildcard variable names ('substitute', above) are specific to a rule.
-    * The same variable name must be used within each rule's inputs, outputs, etc.
-    * Variable names don't mean anything, so you can use 'sample' or whatever.
-    * snakemake tells you what it's substituting when it runs - look at the "wildcards" output.
-* you must also always provide rules or filenames when you are using wildcards - snakemake doesn't (can't) automatically figure out what wildcards are appropriate.
+### Actually doing some filtering
 
-Question: how does snakemake figure out what the wildcard values should be?
+These two VCF files are identical - nothing we're doing above does any filtering. Let's change that.
 
-(The answer is "pattern matching" - it guesses based on what it's being asked to do, but only when it can do so with 100% reliability, under its rules! ...a general feature of computers :)
+Let's look at the end of one of the files -
 
-"Concrete" vs "wildcard" rules -
-* concrete rules ask for / produce a specific filename, without wildcards.
-* wildcard rules provide a _recipe_ for producing a general filename, using wildcards.
+```
+tail -1 *.sens.vcf
+```
 
-Let's try doing this for call_variants. ...what goes wrong?
+Each line has this format:
+```
+ecoli   4561001 .       G       T       9.88514 .       \
+DP=1;SGB=-0.379885;MQ0F=0;AC=2;AN=2;DP4=0,0,0,1;MQ=60    \
+GT:PL   1/1:39,3,0
+```
+
+The 6th column is the QUALity, the 6th is the INFO field, and the 8th is genotyping information.
+
+The INFO field in particular contains all sorts of juicy info - let's take a look [at the docs for some of the common fields](https://en.wikipedia.org/wiki/Variant_Call_Format#Common_INFO_fields). We'll be using DP, depth, below.
+
+We can filter on these fields by specifing a conditions string to `bcftools filter` and then saying we either want to include (`-i`) or exclude (`-e`) variants that match those conditions. Stealing from [Torsten Seeman's blog post](http://thegenomefactory.blogspot.com/2018/10/a-unix-one-liner-to-call-bacterial.html), let's exclude calls that:
+
+* have low quality (qual < 40)
+* have low depth (dp < 10)
+* "look" heterozygous (GT != 1/1), where GT stands for genotype (see 8th column).
+
+To do this, let's add `-e 'QUAL<40 || DP<10 || GT!="1/1"'` to the `bcftools filter` call for the 'specific' one.
+
+Your rule should look like this:
+```
+rule call_variants_spec:
+    conda: "env-bcftools.yml"
+    input:
+        vcf="SRR2584857_1.ecoli-rel606.sens.vcf"
+    output:
+        vcf="SRR2584857_1.ecoli-rel606.spec.vcf"
+    shell: """
+        bcftools filter -Ov -e 'QUAL<40 || DP<10 || GT!="1/1"' {input} > {output\
+}   
+    """
+```
+
+Now run
+```
+snakemake -j 1 --use-conda -p
+```
+and see what happens.
+
+::::spoiler
+Oops! We forgot to ask snakemake to regenerate the file! Snakemake doesn't know that you've changed the parameters, so we need force it to regenerate the spec vcf.
+```
+rm -f *.spec.vcf
+snakemake -j 1 --use-conda -p
+```
+::::
+
+### Digression: why do things this way?
+
+Why are we calling variants sensitively, then filtering afterwards?
+
+More specifically,
+* why are we calling variants with 'sens' where we know that the false positive rate will be high?
+* why aren't we just calling variants twice?
+
+::::warning
+Because...
+::::spoiler
+1. You often want to "bookend" your parameters this way - e.g. here we are doing very sensitive variant calling, and very specific variant calling. Presumably the sensitive one will have very false negatives (will miss very little, but may be overwhelming), and the specific one will have very few false positives (but may miss a lot).
+2. The pileup step is expensive. It's best to run it just once.
+::::
+
+## Adding more depth
+
+But now, we have a problem. What is it?
+
+It turns out that we didn't call any variants!
+```
+tail -1 *.spec.vcf
+```
+shows just comment lines. What happened?
+
+Well, I gave you a cut-down data file... which is good practice when you're developing a pipeline!
+
+Look at the current file size -
+```
+ls -lh SRR2584857_1.fastq.gz
+```
+and remember it - then, let's get a bigger data set!
+
+The full data sets 
+are under
+https://osf.io/vzfc6/. Go find the folder  `2020... variant calling... big`, and then select the relevant data set. Now find the new URL, and replace it in the Snakefile.
+
+Your new download rule should look like this:
+
+```
+rule download_data:
+    conda: "env-wget.yml"
+    output: "{sample}.fastq.gz"
+    shell: """                                                                   
+        wget https://osf.io/aksmc/download -O {output}                           
+    """
+```
+
+Make those changes and now run
+```
+snakemake -j 1 -p --delete-all-output
+```
+(why do we need to do this?)
+
+and then
+```
+snakemake -j 1 -p --use-conda
+```
+
+Does that work better? How do we tell?
+
+<!-- doing a tview
+install samtools?
+-->
+
+
