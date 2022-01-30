@@ -5,6 +5,8 @@ tags: ggg, ggg2022, ggg298
 
 [![hackmd-github-sync-badge](https://hackmd.io/kW_TiOLsQxeQzRlj6C33jg/badge)](https://hackmd.io/kW_TiOLsQxeQzRlj6C33jg)
 
+([Permanent link on github](https://github.com/ngs-docs/2022-GGG201b-lab/blob/main/hw-1.md))
+
 Due by 10pm, Thursday Feb 3rd
 
 Please note that you may freely work together with others, but you must hand it in separately.
@@ -27,15 +29,27 @@ git clone YOUR_REPO_URL 201b-lab-hw1
 
 Change into that directory:
 ```
-cd 201b-lab-hw1/
+cd ~/201b-lab-hw1/
 ```
-**You'll need to change directories every time you log in to farm.**
+
+and start up a 2 hour session on a compute node:
+```
+srun -p high2 -t 2:00:00 -c 4 --mem=10000 --pty bash
+```
+
+**You'll need to change directories and use srun every time you log in to farm.**
 
 ## 3. Run the current workflow
 
 (Estimate: 15 minutes)
 
-Make sure you can successfully run the current workflow:
+Fix the Snakefile by updating from the very latest version:
+```
+curl -L -O https://raw.githubusercontent.com/ngs-docs/2022-ggg-201b-hw1/main/Snakefile
+```
+Note, you'll only need to do this once.
+
+Then, make sure you can successfully run the current workflow:
 
 ```
 snakemake -j 1 --use-conda -p
@@ -50,7 +64,7 @@ You'll need to edit your Snakefile in a text editor. We used nano in class; see 
 
 ---
 
-1. Reprise the generation of two VCF files from end of lab 3 (and lab 4) in your Snakefile. Once output VCF file should be named with the suffix `.sens.vcf` (for "sensitive"), and the other with the suffix `.spec.vcf` (for "specific"). The specific VCF file should be created from the sensitive variant file with the VCF filtering parameters in [this blog post](http://thegenomefactory.blogspot.com/2018/10/a-unix-one-liner-to-call-bacterial.html).
+1. Reprise the generation of two VCF files from end of lab 3 (and lab 4) in your Snakefile. One output VCF file should be named with the suffix `.sens.vcf` (for "sensitive"), and the other with the suffix `.spec.vcf` (for "specific"). The specific VCF file should be created from the sensitive variant file with the VCF filtering parameters in [this blog post](http://thegenomefactory.blogspot.com/2018/10/a-unix-one-liner-to-call-bacterial.html).
 
 2. Add three more samples to the Snakefile, and adjust the current sample to use the full set of reads.
 
