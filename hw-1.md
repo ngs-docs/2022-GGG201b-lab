@@ -1,5 +1,5 @@
 ---
-tags: ggg, ggg2022, ggg298
+tags: ggg, ggg2022, ggg201b
 ---
 # GGG 201(b), Lab Homework 1 - 2022
 
@@ -21,11 +21,26 @@ Sign up for GitHub Classroom using [this link](https://classroom.github.com/a/0U
 
 (Estimate: 5 minutes)
 
-On farm, clone your assignment repository, which will be something like `https://github.com/ngs-docs/2022-ggg-201b-lab-hw1-ctb`; do so like this,
+Create a personal access token (PAT) [per GitHub instructions](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token); you'll need to select the 'repo' scope for it, and I suggest using a 90 day expiration period. 
+
+::::warning
+The PAT is a long string of nonsense characters (usually starting with `ghp_`) that you will use in place of a password, below.
+
+Be sure to save your PAT somewhere where you can find it.
+
+You can run
+```
+git config credential.helper store
+```
+once so that your PAT will be stored in your account for you, too.
+::::
+
+Then, on farm, clone your assignment repository, which will be something like `https://github.com/ngs-docs/2022-ggg-201b-lab-hw1-ctb`; do so like this,
 
 ```
 git clone YOUR_REPO_URL 201b-lab-hw1
 ```
+here use your github username along with your PAT as a password.
 
 Change into that directory:
 ```
@@ -60,6 +75,26 @@ which should produce a file `SRR2584857_1.ecoli-rel606.vcf`.
 
 ::::info
 You'll need to edit your Snakefile in a text editor. We used nano in class; see [lab 3 notes](https://github.com/ngs-docs/2022-GGG201b-lab/blob/main/lab-3.md). You can read more about editing files on a remote computer [here](https://ngs-docs.github.io/2021-august-remote-computing/creating-and-modifying-text-files-on-remote-computers.html), and use options other than nano.
+::::
+
+::::warning
+Warning: GitHub provides an online editor that you can use to edit your Snakefile. You can use it if you wish, but it can get confusing (for you, not me :) if you edit your files on farm and also on github because you will need to synchronize them ("merge" the changes) between github and farm.
+
+Read below for more info.
+::::spoiler
+git is a version control system that manages changes to text files, and github is a site for hosting git repositories. They can get complicated pretty fast; you can read [this tutorial](https://ngs-docs.github.io/2021-august-remote-computing/keeping-track-of-your-files-with-version-control.html) for a basic introduction.
+
+The tl;dr: if you make changes on GitHub and want to "pull" them to farm, you can do:
+```
+git pull origin main
+```
+If you make (commit) changes on farm and want to push them to GitHub, you can do:
+```
+git push origin main
+```
+You cannot (1) make changes on GitHub, (2) make independent changes on farm, and (3) push changes from farm to GitHub. You must first merge them by doing a pull.
+
+(Honestly it's easiest if you just edit your files in just one place...)
 ::::
 
 ---
