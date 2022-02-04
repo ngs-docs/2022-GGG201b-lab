@@ -35,7 +35,20 @@ I have access your github repository and will use that to look at your handed-in
 
 ## variant calling vs de novo assembly
 
-@@
+revisiting variant calling: assumptions and scope:
+- which do we want? SNPs, short indels, long indels/structural variation
+- accurate short reads work well for SNPs
+- inaccurate long reads vs accurate long reads
+- assumes that we have a reference that includes the main things
+- value: VEP, population structure, GWAS
+
+but variant calling is almost always _reference based_. It's even in the name - "variant"!
+
+Where do our reference genomes come from?
+
+De novo assembly.
+
+(Diagram stuff ensues HERE.)
 
 ## running our first assembly
 
@@ -139,7 +152,59 @@ cat quast_results/latest/report.txt
 
 ### assembly metrics and stats explained
 
-@@ n50, l50, etc.
+You should see something like:
+
+```
+All statistics are based on contigs of size >= 500 bp, unless otherwise noted (e.g., "# contigs (>= 0 bp)" and "Total length (>= 0 bp)" include all contigs).
+
+Assembly                    SRR2584857_assembly
+# contigs (>= 0 bp)         126                
+# contigs (>= 1000 bp)      92                 
+# contigs (>= 5000 bp)      68                 
+# contigs (>= 10000 bp)     65                 
+# contigs (>= 25000 bp)     52                 
+# contigs (>= 50000 bp)     33                 
+Total length (>= 0 bp)      4557069            
+Total length (>= 1000 bp)   4542425            
+Total length (>= 5000 bp)   4474835            
+Total length (>= 10000 bp)  4451946            
+Total length (>= 25000 bp)  4249832            
+Total length (>= 50000 bp)  3540628            
+# contigs                   103                
+Largest contig              326752             
+Total length                4549884            
+GC (%)                      50.72              
+N50                         98799              
+N75                         52265              
+L50                         16                 
+L75                         31                 
+# N's per 100 kbp           0.00 
+```
+
+A few top-level observations:
+
+* assemblies are often fragmented, especially if they use short-read sequencing. This is because of repeats and/or low coverage.
+* you may have an estimate of the total length of your genome from other sources (experimental biology, for example :). Typically your assembly will be either a bit SHORTER than that, for haploid samples (because of repeat collapse/loss) or MUCH MUCH LONGER (because of diploidy or polyploidy).
+
+Given that, most of these numbers should be self-explanatory, except for the N50, N75, L50, and L75.
+
+To calculate these, you need to rank-order the contigs by size (largest to smallest, say) and then pick two rank:
+* the rank at which the sum of the length of all contigs below that rank equals 50% of the length of the whole asssembly
+* the same, but for 75%
+
+Then:
+
+L50: the number of contigs below the 50% rank
+N50: the contig length at the 50% rank
+L75: the number of contigs below the 75% rank
+N75: the contig length at the 75% rank
+
+These exist because assembly is always interested in producing _long contigs_ from _shorter ones_. Again, that's in the name :). So you want measures that reflect how much of the content of your assembly is in long bits.
+
+Let's consider some extremes:
+
+* if your entire genome is assembled into one contig, then your L50 is 1, and your N50 is the genome length.
+* if your reads completely failed to assemble, then your L50 is the size of your read, and your N50 is the size of a read.
 
 ### annotating the assembly
 
