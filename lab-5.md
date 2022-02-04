@@ -86,7 +86,7 @@ we're going to use the following software:
 * [quast](http://bioinf.spbau.ru/quast) for genome assembly evaluation.
 * [prokka](https://github.com/tseemann/prokka) for bacterial and archaeal genome annotation.
 
-In brief, megahit takes a pile of reads and give syou a genome; quast gives you statistics about that genome; and prokka annotates the genome with genes.
+In brief, megahit takes a pile of reads and gives you a genome; quast gives you statistics about that genome; and prokka annotates the genome with genes.
 
 ---
 
@@ -188,8 +188,8 @@ A few top-level observations:
 
 Given that, most of these numbers should be self-explanatory, except for the N50, N75, L50, and L75.
 
-To calculate these, you need to rank-order the contigs by size (largest to smallest, say) and then pick two rank:
-* the rank at which the sum of the length of all contigs below that rank equals 50% of the length of the whole asssembly
+To calculate these, you need to rank-order the contigs by size (largest to smallest, say) and then pick two ranks:
+* the rank at which the sum of the length of all contigs below that rank equals 50% of the length of the whole assembly
 * the same, but for 75%
 
 Then:
@@ -204,7 +204,7 @@ These exist because assembly is always interested in producing _long contigs_ fr
 Let's consider some extremes:
 
 * if your entire genome is assembled into one contig, then your L50 is 1, and your N50 is the genome length.
-* if your reads completely failed to assemble, then your L50 is the size of your read, and your N50 is the size of a read.
+* if your reads completely failed to assemble, then your L50 is the number reads, and your N50 is the size of an individual read.
 
 ### annotating the assembly
 
