@@ -77,9 +77,26 @@ mamba install -y bedtools blast
 
 We're going to start by doing a gene search in the assembly, which is a pretty common way to explore and validate and use assembled sequences.
 
+There are a bunch of ways to search for genes and we'll try a few of them -
+
+* search for a gene by name in annotations
+* search for a gene by sequence in annotations
+* search for a gene by sequence in the genome contigs
+
+### Searching for the CRP gene in the annotation with grep
+
+You can use the 'grep' search tool to look for genes with a specific string in their name in an annotation; here, we're searching for the name 'crp', for cAMP response protein:
+```
+grep -i crp SRR2584857_annot/SRR2584857_annot.faa
+```
+
+This is, however, dependent on having an good set of annotation names. Can we search for it by sequence? Yes!
+
 ### Getting the CRP gene sequence from Salmonella
 
-Let's grab a gene sequence from uniprot - I found [this](https://www.uniprot.org/uniprot/P0A2T6) by googling 'salmonella crp'.
+First, we'll need a query gene. We'll go with CRP.
+
+Let's grab the CRP gene sequence from uniprot - I found [this](https://www.uniprot.org/uniprot/P0A2T6) by googling 'salmonella crp'.
 
 Go to https://www.uniprot.org/uniprot/P0A2T6, then click on Format at the top, then select 'FASTA'. You'll see some protein sequence:
 
@@ -103,17 +120,11 @@ cat crp.faa
 ```
 should show the same sequence as above.
 
-### Searching for the CRP gene in the annotation with grep
-
-```
-grep -i crp SRR2584857_annot/SRR2584857_annot.faa
-```
-
 ### Searching for the CRP gene in the assembly with BLAST
 
-Let's search for the gene in the assembled contigs first.
+Now, let's search for the gene in the assembled contigs.
 
-Format:
+First, build a BLAST database from your genome:
 ```
 makeblastdb -dbtype nucl -in SRR2584857-assembly.fa 
 ```
@@ -125,26 +136,29 @@ tblastn -query crp.faa -db SRR2584857-assembly.fa
 
 ### Searching for the CRP gene in the annotation with BLAST
 
-Did it get annotated properly?
+We an also search for the CRP gene in the annotation sequence files; this is something you might want to do if you have a candidate gene for something that is unlikely to be "properly" named.
 
+Build a BLAST database for the output protein files from the prokka annotation:
 ```
 makeblastdb -dbtype prot -in SRR2584857_annot/SRR2584857_annot.faa
 ```
 
+and search a protein database with a protein query:
 ```
 blastp -query crp.faa -db SRR2584857_annot/SRR2584857_annot.faa
 ```
 
 ### playing with e-value cutoffs
 
-...and thinking about sensitivity and specificity...
 
+You'll note a lot of ~spurious matches above. This is because BLAST by default uses very sensitive but not very specific reporting parameters. What happens if we make the reporting parameters more stringent? (This is similar to what we did with the VCF files.)
 ```
 tblastn -query crp.faa -db SRR2584857-assembly.fa -evalue 1e-6
 ```
 
-### Using bedtools to get genes sequences out
+### Using bedtools to get gene sequences out
 
+Let's get the GFF entry for the CRP gene:
 ```
 grep CRP SRR2584857_annot/SRR2584857_annot.gff 
 ```
@@ -153,12 +167,12 @@ If we put that information into a gene feature format file (GFF):
 ```
 grep CRP SRR2584857_annot/SRR2584857_annot.gff > crp.gff
 ```
-we can then use bedtools to get the gene sequence out from the assembly
+we can then use bedtools to get the gene sequence out from the assembly:
 ```
 bedtools getfasta -fi SRR2584857-assembly.fa -bed crp.gff
 ```
 
-### 
+### Finding nearby features with bedtools
 
 Suppose we have a file that specifies some features of interest - this might be variants, or something else. (Yes, I should have shown you this back in the variants labs :).
 
@@ -224,4 +238,12 @@ rule annotate:
     """
 ```
 
+Stepwise approach to building a snakefile:
 
+* start with the shell commands
+* add input/output to link the rules
+* specify a default rule
+* replace filenames in shell blocks with `{input}` and `{output}` template variables
+* start thinking about wildcards
+
+and save and check snakefile formatting with `snakemake -n` periodically!
