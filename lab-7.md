@@ -72,7 +72,7 @@ which of these three will work?
 
 Log into farm, request a node, and change into week 5's result directory:
 ```
-srun --nodes=1 -p high2 -t 2:00:00 -c 4 --mem 6GB --pty /bin/bash
+srun --nodes=1 -p high2 -t 1:00:00 -c 4 --mem 6GB --pty /bin/bash
 ```
 activate the `assembly` conda environment:
 ```
@@ -108,20 +108,20 @@ while that's going on, let's look at...
 ```
 rule annotate:
     input:
-        "{sample}-assembly.fa"
+        "SRR2584857-assembly.fa"
     output:
-        directory("{sample}_annot")
+        directory("SRR2584857_annot")
     shell: """                                                                
        prokka --prefix {output} {input}                                       
     """
 
 rule assemble:
     input:
-        r1 = "{sample}_1.fastq.gz",
-        r2 = "{sample}_2.fastq.gz"
+        r1 = "SRR2584857_1.fastq.gz",
+        r2 = "SRR2584857_2.fastq.gz"
     output:
-        dir = directory("{sample}_assembly"),
-        assembly = "{sample}-assembly.fa"
+        dir = directory("SRR2584857_assembly"),
+        assembly = "SRR2584857-assembly.fa"
     shell: """                                                                
        megahit -1 {input.r1} -2 {input.r2} -f -m 5e9 -t 4 -o {output.dir}     
        cp {output.dir}/final.contigs.fa {output.assembly}                     
@@ -129,9 +129,9 @@ rule assemble:
 
 rule quast:
     input:
-        "{sample}-assembly.fa"
+        "SRR2584857-assembly.fa"
     output:
-        directory("{sample}_quast")
+        directory("SRR2584857_quast")
     shell: """                                                                
        quast {input} -o {output}                                              
     """
@@ -150,7 +150,18 @@ How do we count the number of genes in an assembled genome?
 
 TODO:
 * how would we add in wildcards here?
-* 
+* what's a good default rule, i.e. what targets should go in it?
+
+
+::::info
+Your prokka annotation may not run depending on what version you have installed. If you see that 'hmmer' fails, you may need to run the following commands:
+```
+
+mamba install -y perl-app-cpanminus
+cpanm Bio::SearchIO::hmmer --force
+```
+see [this github issue](https://github.com/tseemann/prokka/issues/528#issuecomment-1035198733) for more information.
+::::
 
 ### A snakemake rule for subsampling reads
 
@@ -171,5 +182,7 @@ rule subset_100k:
 what's going on here?
 
 ::::info
-How do we count the number of reads in a file??
+How do we count the number of reads in a file?
+
+And how do we turn that into an estimate of coverage?
 ::::
