@@ -25,7 +25,7 @@ Submit at least three _different_ assembly entries to [this form](https://docs.g
 1. Your GitHub ID.
 2. The filename of one assemby produced by your Snakefile.
 3. The number of reads used in the assembly.
-4. Your estimate of the coverage (use 4.5 Mb as the genome coverage).
+4. Your estimate of the coverage (use 4.5 Mb as the genome size).
 5. The N50 of the assembly.
 6. The total bp in contigs > 1kb for the assembly.
 7. The total number of contigs > 1kb for the assembly.
