@@ -3,6 +3,10 @@ tags: ggg, ggg2022, ggg201b
 ---
 # GGG 201(b), Lab Homework 2 - 2022
 
+[![hackmd-github-sync-badge](https://hackmd.io/WpOTGwL8RhWaJjDMYlssSg/badge)](https://hackmd.io/WpOTGwL8RhWaJjDMYlssSg)
+
+([Permanent link on github](https://github.com/ngs-docs/2022-GGG201b-lab/blob/main/hw-2.md))
+
 Due by 10pm, Tuesday March 1st
 
 ## 1. Connect to GitHub Classroom and clone the hw2 repository
