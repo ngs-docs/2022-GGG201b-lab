@@ -17,7 +17,6 @@ Contents:
 
 I will use the data in: https://github.com/ctb/2022-ggg-201b-assembly-collapse
 
-but unfortunately I couldn't get the binder running :slightly_frowning_face: 
 
 ### Exploring Titus's results
 
