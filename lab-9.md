@@ -17,6 +17,7 @@ Contents:
 
 I will use the data in: https://github.com/ctb/2022-ggg-201b-assembly-collapse
 
+Final notebook from class: [here](https://github.com/ngs-docs/2022-GGG201b-lab/blob/main/lab-9-assembly-collapse.ipynb)
 
 ### Exploring Titus's results
 
