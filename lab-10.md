@@ -5,6 +5,7 @@ tags: ggg, ggg2021, ggg201b
 
 [![hackmd-github-sync-badge](https://hackmd.io/zpk5b79BSvaSBns4HUPD8g/badge)](https://hackmd.io/zpk5b79BSvaSBns4HUPD8g)
 
+[(Permanent link)](https://github.com/ngs-docs/2022-GGG201b-lab/blob/main/lab-10.md)
 
 [toc]
 
