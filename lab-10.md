@@ -3,6 +3,9 @@ tags: ggg, ggg2021, ggg201b
 ---
 # Lab 10 outline - more RNAseq; workflow systems - GGG 201(b) lab, March 11th, 2022
 
+[![hackmd-github-sync-badge](https://hackmd.io/zpk5b79BSvaSBns4HUPD8g/badge)](https://hackmd.io/zpk5b79BSvaSBns4HUPD8g)
+
+
 [toc]
 
 ## RNAseq
