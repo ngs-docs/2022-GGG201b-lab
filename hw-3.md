@@ -3,45 +3,29 @@ tags: ggg, ggg2022, ggg201b
 ---
 # GGG 201(b), Lab Homework 3 - 2022
 
+[![hackmd-github-sync-badge](https://hackmd.io/pnzNOH5KQKmKugAFbY7RKA/badge)](https://hackmd.io/pnzNOH5KQKmKugAFbY7RKA)
+
 ([Permanent link on github](https://github.com/ngs-docs/2022-GGG201b-lab/blob/main/hw-3.md))
 
 Due by 10pm, Tuesday March 15th
 
-For this homework, you're going to work with [the RNAseq analysis pipeline we used in weeks 8 and 9](https://hackmd.io/447eXyGsT_OmP8ySC05tyA).
+For this homework, you're going to add some samples to [the RNAseq analysis pipeline we used in weeks 8 and 9](https://hackmd.io/447eXyGsT_OmP8ySC05tyA).
 As you may recall, this RNAseq workflow conducted a differential expression analysis of three wild-type (wt) yeast data sets against three snf2 knockouts.
 
 For HW #3, you'll add
 add two new data sets into the workflow, and adjust the p-value cutoff to be 0.05 instead of 0.1. 
 
-## 1. Create GitHub repo for homework
-
-@@
-
-## 2. Start binder
+## 1. Start up the RNAseq binder
 
 Start up a new binder:
 
 [![Binder](https://aws-uswest2-binder.pangeo.io/badge_logo.svg)](https://aws-uswest2-binder.pangeo.io/v2/gh/nih-cfde/rnaseq-in-the-cloud/stable?urlpath=rstudio)
 
 ::::info
-You can stop and restart your binder instance **[at your hub home](https://hub.aws-uswest2-binder.pangeo.io/hub/home)**, in case it tells you that you already have one running but you can't find the tab.
+You can stop a running binder instance **[at your hub home](https://hub.aws-uswest2-binder.pangeo.io/hub/home)**, in case it tells you that you already have one running but you can't find the tab.
 ::::
 
-and configure your github information:
-
-```
-git config --global user.email "<you>@ucdavis.edu"
-git config --global user.name "<Your Name>"
-```
-
-## 3. Make edits etc.
-
-::::info
-If you have already changed files in git and pushed them to your hw3 repository, you can pull them into a new binder by doing:
-```
-git pull <your github URL> feedback
-```
-::::
+## 2. Make edits etc.
 
 In your running binder, do the following four steps:
 
@@ -66,9 +50,9 @@ snakemake -j 4 --use-conda
 ```
 and then load `rnaseq-workflow.Rmd` and knit it to HTML.
 
-Verify that your HTML workflow report has the new data sets in the PCA and the MDS, and that the gene report has four dots for each condition.
+Verify that your HTML workflow report shows the new data sets in the PCA and the MDS plots, and that the individual gene report has four points for each condition.
 
-## 4. Push your files to github, and/or save them
+## 4. Save your files to your local computer
 
 You'll have four changed files to preserve and hand in. They are:
 
@@ -77,16 +61,12 @@ You'll have four changed files to preserve and hand in. They are:
 * `rnaseq-workflow.Rmd`
 * `rnaseq-workflow.html`
 
-You can download these to your laptop by selecting them in the file browser and selection More... Export. Hint: This might be a good backup in case you have trouble pushing them github.
+You can download these to your laptop by selecting them in the file browser and selecting More... Export.
 
-To hand them in, do the following:
+## 5. Upload the four files to github.
 
-```
-git add Snakefile rnaseq_samples.csv rnaseq-workflow.Rmd rnaseq-workflow.html
-git commit -m "updated files"
-git push <your github URL> stable:feedback
-```
+Accept the [HW 3 assignment](https://classroom.github.com/a/tWSqU_vu), and once your hw3 repository is created, use the "Add file..." "Upload" menu to upload all four files. You can commit directly to the stable branch (i.e. follow the defaults).
 
-5. Check your github Pull Request to make sure that your files are correct.
+You can check under "Pull requests", "Feedback", "Files changed" to see if the three text files (Snakefile, rnaseq_samples.csv, and rnaseq-workflow.Rmd) have the right changes (a-d, above).
 
-Go to your GitHub repo for HW3 and select Pull Requests. There should be only one. Select it, and then look at "Changed Files". Make sure that the three text files (`Snakefile`, `rnaseq_samples.csv`, and `rnaseq-workflow.Rmd`) all have the right things in them.
+And then... you're done! Congrats!
