@@ -42,7 +42,7 @@ ERR458503 - URL https://osf.io/px7sf/download
 
 (c\) Edit line 26 of `rnaseq-workflow.Rmd` to set the p-value cutoff to be 0.05.
 
-(d) Edit line 487 of the `rnaseq-workflow.Rmd` file to contain six conditions (3 wt, 3 snf2).
+(d) Edit line 487 of the `rnaseq-workflow.Rmd` file to contain eight conditions (4 wt, 4 snf2).
 
 Next, run the snakemake workflow with
 ```
